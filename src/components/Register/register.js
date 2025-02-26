@@ -52,16 +52,20 @@ const RegistrationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", formData);
-      
-      const response =  await axiosInstance.post("/user/register", formData);
-      console.log(response);
-      
-      if(response.status === 201){
-          navigate("/register-success");
+      // console.log("Form submitted:", formData);
+      try {
+        const response =  await axiosInstance.post("/user/register", formData);
+        console.log(response);
+        
+        if(response.status === 201){
+            navigate("/register-success");
+          }
+          else{
+            alert("Registration failed..!");
         }
-        else{
-          alert("Registration failed..!");
+      } catch (err) {
+        console.log(err);
+        
       }
 
       
