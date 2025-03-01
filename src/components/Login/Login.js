@@ -7,7 +7,7 @@ import Alert from '@mui/material/Alert';
 import "./login.css";
 
 
-const LoginForm = () => {
+const LoginForm = ({ showAlert }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -39,17 +39,20 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await axiosInstance.post("/vendor/login", loginData);
+      // const response = await axiosInstance.post("/vendor/login", loginData);
 
-      if (response.status === 200) {
-        console.log(response.data);
-        localStorage.setItem("token", response.data); // Store JWT token
-        sessionStorage.setItem("message", "Login Successful!"); // Store username
-        navigate("/home"); // Redirect after successful login
-      }
-      else {
-        setError("Login failed");
-      }
+      // if (response.status === 200) {
+      //   console.log(response.data);
+      //   localStorage.setItem("token", response.data); // Store JWT token
+      //   sessionStorage.setItem("message", "Login Successful!"); // Store username
+      showAlert("success", "Vendor Login success.", true);
+      //   navigate("/home"); // Redirect after successful login
+
+      // }
+
+      // else {
+      //   setError("Login failed");
+      // }
     } catch (error) {
       setError("Invalid email or password");
     }

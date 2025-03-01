@@ -7,44 +7,39 @@ import LoginForm from './components/Login/Login';
 import LoginSuccessful from './components/Login/LoginSuccess';
 import Navbar from './components/Navbar/Navbar';
 import VendorRegister from './components/VendorRegister/VendorRegister';
+import Alert from './components/Alerts/Alert';
+import { useState } from 'react';
+import VendorDashboard from './components/Vendor Dashboard/VendorDashboard';
+import ServiceForm from './components/Verndor Services/ServiceForm';
 
 function App() {
+  const [alert, setAlert] = useState({ type: "", message: "", isOpen: false })
 
-  // useEffect(()=>{
-    
-  //     try {
-  //       axios.get("http://localhost:8001/vendor/getVendors", { 
-  //         auth:{
-  //           username:"user1",
-  //           password:"password1"
-  //         }
-  //        })
-  //         .then((response)=>{
-  //           console.log(response.data);
-            
-  //         })
-  //     } catch (err) {
-  //         console.error(err);
-          
-  //     }
-  // },[])
+  const showAlert = (type, message) => {
+    setAlert({ type, message, isOpen: true });
+
+    setTimeout(() => {
+      setAlert({ type: "", message: "", isOpen: false });
+    }, 5000);
+  };
+
+
   return (
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //   </header>
-    // </div>
     <>
       <BrowserRouter>
-        <Navbar/>
-          <Routes>
-            <Route path='/' element={<Navigate to="/home" replace />} />
-            <Route path='/register' element={ <RegistrationForm/> } />
-          <Route path='/home' element={ <Homepage/> } />
-          <Route path='/register-success' element={ <RegisterSuccessful/> } />
-          <Route path='/vendor-login' element={ <LoginForm/> } />
-          <Route path='/login-success' element={ <LoginSuccessful/> } />
-          <Route path='/vendor-register' element={ <VendorRegister/> } />
+        <Navbar />
+        <Alert type={alert.type} message={alert.message} isOpen={alert.isOpen} />
+        <Routes>
+          {/* <Route path='/' element={<Navigate to="/home" replace />} /> */}
+          <Route path='/' element={<Homepage />} />
+          <Route path='/user-register' element={<RegistrationForm />} />
+          <Route path='/vendor-register' element={<VendorRegister />} />
+          <Route path='/register-success' element={<RegisterSuccessful />} />
+          <Route path='/vendor-login' element={<LoginForm showAlert={showAlert} />} />
+          <Route path='/login-success' element={<LoginSuccessful />} />
+          <Route path='/vendor-dashboard' element={<VendorDashboard />} />
+          <Route path='/create-service' element={<ServiceForm />} />
+
         </Routes>
       </BrowserRouter>
     </>

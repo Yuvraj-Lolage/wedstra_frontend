@@ -1,0 +1,128 @@
+#main-dashboard-div{
+    width: 100%;
+    font-family: Roboto, sans-serif;
+}
+#main-dashboard-div .vertical-nav-col{
+    background-color: white;
+    height: 100%;
+    z-index: 1;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#main-dashboard-div .vertical-nav-container{
+    margin: 0 0 0 0;
+    height: 100%;
+}
+
+#main-dashboard-div .dashboard-content-col{
+    background-color: white;
+    height: 92vh;
+    overflow-y: hidden;
+}
+
+
+.vertical-nav-container .nav .nav-item .custom-nav-link{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    cursor: pointer;
+    margin:2px 0;
+
+    .icon{
+        width: 24px;
+        height: 24px;
+    }
+
+    .text{
+        color: #313131 !important;
+        font-weight: 500;
+        font-size: 20px;
+        text-transform: capitalize;
+        padding: 0 0 0 12px;
+    }
+}
+
+.vertical-nav-container .nav .nav-item .custom-nav-link.active{
+    background-color: #ddeaf7;
+    border-radius: 12px;
+    
+    .text{
+        font-weight: 600;
+    }
+}
+
+.dashboard-component{
+    margin: 20px;
+}
+
+.dashboard-component .user-details{
+    color: #313131;
+    #title{
+    
+    font-weight: 800;
+    font-size: 4.5rem;
+}
+
+    #sub-title{
+        font-weight: 500;
+        span{
+            color: #CB0033;
+            font-weight: 600;
+        }
+    }
+
+}
+
+#important-msg{
+    background-color: #252A39;
+    width: 100%;
+    height: 200px;
+    margin: 20px 0;
+    padding: 20px 25px;
+
+    border-radius: 15px;    
+}
+
+.button-section{
+    width: 100%;
+    height: max-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.content-button{
+    border: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #ededed;
+    border-radius: 15px;
+}
+
+.content-button #link{
+    text-decoration: none;
+    color: #313131;
+}
+
+
+.button-section .button-img-section{
+    width: 85px;
+    height:85px;
+    background-color: #CB0033;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-img{
+    width: 50px;
+    height: 50px;
+}
+
+
+.button-text{
+    margin-left: 15px;
+}
