@@ -44,6 +44,13 @@
     font-weight: 600;
   }
 
+  .create-service-btn.disabled {
+    background-color: #CB0033 !important;
+    opacity: 0.5; /* Example: make it look disabled */
+    color: #ffffff;
+    cursor: not-allowed;
+  }
+
   .create-service-btn:active,
   .create-service-btn:focus{
     background-color: #CB0033;

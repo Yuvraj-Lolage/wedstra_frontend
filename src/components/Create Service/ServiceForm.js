@@ -3,9 +3,12 @@ import { useDropzone } from "react-dropzone";
 import "bootstrap/dist/css/bootstrap.min.css"; // Custom CSS for extra styling
 import "./createService.css";
 import axiosInstance from "../../API/axiosInstance";
-import { fetchCategories } from "../../API/Resources/fetchCategories"
+import { fetchCategories } from "../../API/Resources/fetchCategories";
+import { fetchStates } from "../../API/Resources/fetchStates";
+import { useNavigate } from "react-router-dom";
 
 const ServiceForm = () => {
+  const navigator = useNavigate();
   const [serviceData, setServiceData] = useState({
     service_name: "",
     description: "",
@@ -15,10 +18,12 @@ const ServiceForm = () => {
     location: "",
     files: [],
   });
+  const [isDisabled, setIsDisabled] = useState(false);
   const [vendorId, setVendorId] = useState();
   const [errors, setErrors] = useState({});
   const [token, setToken] = useState();
   const [categories, setCategories] = useState([]);
+  const [states, setStates] = useState([]);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -27,6 +32,11 @@ const ServiceForm = () => {
     const getCategories = async () => {
       const categoryList = await fetchCategories();
       setCategories(categoryList);
+    }
+
+    const getStates = async () => {
+      const stateList = await fetchStates();
+      setStates(stateList);
     }
     if (storedUser) {
       setVendorId(storedUser.id);
@@ -37,7 +47,23 @@ const ServiceForm = () => {
     }
 
     getCategories();
+    getStates();
   }, [])
+
+
+  useEffect(()=>{
+    const requiredFields = ["service_name", "description", "category", "min_price", "max_price", "location"];
+
+        // Check if all required fields are filled
+        const allFieldsFilled = requiredFields.every((field) => serviceData[field]?.trim() !== "");
+
+        // Check if there are no validation errors in required fields
+        const noErrors = requiredFields.every((field) => !errors[field]);
+
+        const fileInput = serviceData.files.length > 0;
+
+    setIsDisabled(allFieldsFilled && noErrors && fileInput);
+  },[serviceData, errors, setIsDisabled])
 
 
   // Handle input changes
@@ -125,7 +151,7 @@ const ServiceForm = () => {
           }
         }
       );
-      console.log(serviceData);
+      navigator('/service-create-success');
     } catch (err) {
       console.log(err);
     }
@@ -220,15 +246,20 @@ const ServiceForm = () => {
           {/* Location */}
           <div className="mb-3">
             <label className="form-label">Location</label>
-            <input
-              type="text"
+            <select
               className={`form-control  form-control-lg ${errors.location ? "is-invalid" : ""}`}
               name="location"
-              placeholder="Enter service location"
               value={serviceData.location}
               onChange={handleChange}
               required
-            />
+            >
+              <option value="">Select Category</option>
+              {states.map((state) => (
+                  <option key={state.state_code} value={state.name}>
+                    {state.name}
+                  </option>
+                ))}
+            </select>
             {errors.location && <div className="invalid-feedback">{errors.location}</div>}
           </div>
 
@@ -248,7 +279,7 @@ const ServiceForm = () => {
           </div>
 
           {/* Submit Button */}
-          <button type="submit" className="btn create-service-btn w-100">
+          <button type="submit" className={`btn create-service-btn w-100  ${!isDisabled ? 'disabled' : '' }`}>
             Create Service
           </button>
         </form>

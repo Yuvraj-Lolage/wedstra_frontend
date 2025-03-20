@@ -12,6 +12,7 @@ import { useState } from 'react';
 import VendorDashboard from './components/Vendor Dashboard/VendorDashboard';
 import ServiceDetails from './components/ServiceDetails/ServiceDetails';
 import ServiceForm from './components/Create Service/ServiceForm';
+import ServiceSuccess from './components/Service Success/ServiceSuccess';
 
 function App() {
   const [alert, setAlert] = useState({ type: "", message: "", isOpen: false, onClose:null })
@@ -43,6 +44,7 @@ function App() {
           <Route path='/login-success' element={<LoginSuccessful />} />
           <Route path='/vendor-dashboard' element={<VendorDashboard />} />
           <Route path='/service-details' element={<ServiceDetails />} />
+          <Route path='/service-create-success' element={ <ServiceSuccess/> }/>
 
         </Routes>
       </BrowserRouter>
