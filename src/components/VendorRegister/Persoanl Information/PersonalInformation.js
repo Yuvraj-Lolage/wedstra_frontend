@@ -1,16 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import "./personal_info.css";
 import { useDropzone } from "react-dropzone";
-function PersonalInformation({ updateFormData }) {
-    const [personalFormData, setPersonalFormData] = useState({
-        username: "",
-        password: "",
-        vendor_name: "",
-        email: "",
-        phone_no: "",
-        city: ""
-    });
-    
+function PersonalInformation({ formData, updateFormData, setPersonalNext }) {
+    const [personalFormData, setPersonalFormData] = useState(formData);
+
     const [errors, setErrors] = useState({});
 
     const validate = (name, value) => {
@@ -57,41 +50,138 @@ function PersonalInformation({ updateFormData }) {
 
     useEffect(() => {
         updateFormData(personalFormData);
+
+        const requiredFields = ["username", "password", "vendor_name", "email", "phone_no", "city"];
+
+        // Check if all required fields are filled
+        const allFieldsFilled = requiredFields.every((field) => personalFormData[field]?.trim() !== "");
+
+        // Check if there are no validation errors in required fields
+        const noErrors = requiredFields.every((field) => !errors[field]);
+
+        setPersonalNext(allFieldsFilled && noErrors);
+    }, [personalFormData, errors, updateFormData, setPersonalNext]);
+
+    useEffect(() => {
+        updateFormData(personalFormData);
     }, [personalFormData, updateFormData]);
 
     return (
+        // <div className='personal-info-form'>
+        //     <section className='title'>
+        //         <h1>Personal Information</h1>
+        //     </section>
+        //     <div className='form-section'>
+        //         {Object.entries(personalFormData).map(([key, value]) => (
+        //             <div className="mb-3" key={key}>
+        //                 <input
+        //                     type={key === "password" ? "password" : "text"}
+        //                     className={`form-control form-control-lg ${errors[key] ? "is-invalid" : ""}`}
+        //                     name={key}
+        //                     placeholder={key.replace("_", " ").charAt(0).toUpperCase() + key.replace("_", " ").slice(1)}
+        //                     value={value}
+        //                     onChange={handleChange}
+        //                 />
+        //                 {errors[key] && <div className="invalid-feedback">{errors[key]}</div>}
+        //             </div>
+        //         ))}
+        //     </div>
+        // </div>
         <div className='personal-info-form'>
             <section className='title'>
                 <h1>Personal Information</h1>
             </section>
             <div className='form-section'>
-                {Object.entries(personalFormData).map(([key, value]) => (
-                    <div className="mb-3" key={key}>
-                        <input
-                            type={key === "password" ? "password" : "text"}
-                            className={`form-control form-control-lg ${errors[key] ? "is-invalid" : ""}`}
-                            name={key}
-                            placeholder={key.replace("_", " ").charAt(0).toUpperCase() + key.replace("_", " ").slice(1)}
-                            value={value}
-                            onChange={handleChange}
-                        />
-                        {errors[key] && <div className="invalid-feedback">{errors[key]}</div>}
-                    </div>
-                ))}
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        className={`form-control form-control-lg ${errors["username"] ? "is-invalid" : ""}`}
+                        name="username"
+                        placeholder="Username"
+                        value={formData.username || ""}
+                        onChange={handleChange}
+                    />
+                    {errors["username"] && <div className="invalid-feedback">{errors["username"]}</div>}
+                </div>
+
+                <div className="mb-3">
+                    <input
+                        type="password"
+                        className={`form-control form-control-lg ${errors["password"] ? "is-invalid" : ""}`}
+                        name="password"
+                        placeholder="Password"
+                        value={formData.password || ""}
+                        onChange={handleChange}
+                    />
+                    {errors["password"] && <div className="invalid-feedback">{errors["password"]}</div>}
+                </div>
+
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        className={`form-control form-control-lg ${errors["vendor_name"] ? "is-invalid" : ""}`}
+                        name="vendor_name"
+                        placeholder="Vendor_name"
+                        value={formData.vendor_name || ""}
+                        onChange={handleChange}
+                    />
+                    {errors["vendor_name"] && <div className="invalid-feedback">{errors["vendor_name"]}</div>}
+                </div>
+
+                <div className="mb-3">
+                    <input
+                        type="email"
+                        className={`form-control form-control-lg ${errors["email"] ? "is-invalid" : ""}`}
+                        name="email"
+                        placeholder="Email"
+                        value={formData.email || ""}
+                        onChange={handleChange}
+                    />
+                    {errors["email"] && <div className="invalid-feedback">{errors["email"]}</div>}
+                </div>
+
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        className={`form-control form-control-lg ${errors["phone_no"] ? "is-invalid" : ""}`}
+                        name="phone_no"
+                        placeholder="Phone Number"
+                        value={formData.phone_no || ""}
+                        onChange={handleChange}
+                    />
+                    {errors["phone_no"] && <div className="invalid-feedback">{errors["phone_no"]}</div>}
+                </div>
+
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        className={`form-control form-control-lg ${errors["city"] ? "is-invalid" : ""}`}
+                        name="city"
+                        placeholder="City"
+                        value={formData.city || ""}
+                        onChange={handleChange}
+                    />
+                    {errors["city"] && <div className="invalid-feedback">{errors["city"]}</div>}
+                </div>
             </div>
         </div>
     );
 }
 
-function BusinessInformation({ updateFormData }) {
-    const [businessFormData, setBusinessFormData] = useState({
-        business_name: '',
-        business_category: '',
-        gst_number: '',
-        terms_and_conditions: ''
-    });
+function BusinessInformation({ formData, updateFormData, setPersonalNext }) {
+    const [businessFormData, setBusinessFormData] = useState(formData);
+    // const [businessFormData, setBusinessFormData] = useState({
+    //     business_name: '',
+    //     business_category: '',
+    //     gst_number: '',
+    //     terms_and_conditions: ''
+    // });
 
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        setPersonalNext(false);
+    }, [])
 
     useEffect(() => {
         updateFormData(businessFormData);
@@ -106,21 +196,33 @@ function BusinessInformation({ updateFormData }) {
             case "business_category":
                 if (!value.trim()) error = "Business category is required";
                 break;
-                // case "gst_number":
-                //     const gstValue = value.toUpperCase();
-                //     if (!gstValue.trim()) error = "GST number is required";
-                //     else if (!/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[A-Z]{1}[0-9]{1}$/.test(gstValue)) {
-                //         error = "Invalid GST number format";
-                //     }
-                //     break;
             case "terms_and_conditions":
                 if (!value.trim()) error = "Terms and conditions are required";
+                break;
+
+            case "gst_number":
+                if (!value.trim()) error = "GST Number are required";
                 break;
             default:
                 break;
         }
         return error;
     };
+
+
+    useEffect(() => {
+        updateFormData(businessFormData);
+
+        const requiredFields = ["business_name", "business_category", "gst_number", "terms_and_conditions"];
+
+        // Check if all required fields are filled
+        const allFieldsFilled = requiredFields.every((field) => businessFormData[field]?.trim() !== "");
+
+        // Check if there are no validation errors in required fields
+        const noErrors = requiredFields.every((field) => !errors[field]);
+
+        setPersonalNext(allFieldsFilled && noErrors);
+    }, [businessFormData, errors, updateFormData, setPersonalNext]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -142,20 +244,54 @@ function BusinessInformation({ updateFormData }) {
 
             <div className='form-section'>
                 <div className="mb-3">
-                    <input type="text" className={`form-control form-control-lg ${errors.business_name ? "is-invalid" : ""}`} name="business_name" placeholder="Business Name" value={businessFormData.business_name} required onChange={handleChange} />
-                    {errors.business_name && <div className="invalid-feedback">{errors.business_name}</div>}
+                    <input
+                        type="text"
+                        className={`form-control form-control-lg ${errors["business_name"] ? "is-invalid" : ""}`}
+                        name="business_name"
+                        placeholder="Business name"
+                        value={formData.business_name || ""}
+                        onChange={handleChange}
+                    />
+                    {errors["business_name"] && <div className="invalid-feedback">{errors["business_name"]}</div>}
                 </div>
+
+
+
                 <div className="mb-3">
-                    <input type="text" className={`form-control form-control-lg ${errors.business_category ? "is-invalid" : ""}`} name="business_category" placeholder="Business Category" value={businessFormData.business_category} required onChange={handleChange} />
-                    {errors.business_category && <div className="invalid-feedback">{errors.business_category}</div>}
+                    <input
+                        type="text"
+                        className={`form-control form-control-lg ${errors["business_category"] ? "is-invalid" : ""}`}
+                        name="business_category"
+                        placeholder="Business Category"
+                        value={formData.business_category || ""}
+                        onChange={handleChange}
+                    />
+                    {errors["business_category"] && <div className="invalid-feedback">{errors["business_category"]}</div>}
                 </div>
+
                 <div className="mb-3">
-                    <input type="text" className={`form-control form-control-lg ${errors.gst_number ? "is-invalid" : ""}`} name="gst_number" placeholder="GST No" value={businessFormData.gst_number} required onChange={handleChange} />
-                    {errors.gst_number && <div className="invalid-feedback">{errors.gst_number}</div>}
+                    <input
+                        type="text"
+                        className={`form-control form-control-lg ${errors["gst_number"] ? "is-invalid" : ""}`}
+                        name="gst_number"
+                        placeholder="GST Number"
+                        value={formData.gst_number || ""}
+                        onChange={handleChange}
+                    />
+                    {errors["gst_number"] && <div className="invalid-feedback">{errors["gst_number"]}</div>}
                 </div>
+
+
                 <div className="mb-3">
-                    <input type="text" className={`form-control form-control-lg ${errors.terms_and_conditions ? "is-invalid" : ""}`} name="terms_and_conditions" placeholder="Terms & Conditions" value={businessFormData.terms_and_conditions} required onChange={handleChange} />
-                    {errors.terms_and_conditions && <div className="invalid-feedback">{errors.terms_and_conditions}</div>}
+                    <input
+                        type="text"
+                        className={`form-control form-control-lg ${errors["terms_and_conditions"] ? "is-invalid" : ""}`}
+                        name="terms_and_conditions"
+                        placeholder="Terms & Conditions"
+                        value={formData.terms_and_conditions || ""}
+                        onChange={handleChange}
+                    />
+                    {errors["terms_and_conditions"] && <div className="invalid-feedback">{errors["terms_and_conditions"]}</div>}
                 </div>
             </div>
         </div>
@@ -163,39 +299,52 @@ function BusinessInformation({ updateFormData }) {
 }
 
 
-function DocumentUpload({ updateFormData }) {
-    // const [aadharCard, setAadharCard] = useState(null);
-    // const [panCard, setPanCard] = useState(null);
-    // const [businessPan, setBusinessPan] = useState(null);
-    // const [electricityBill, setElectricityBill] = useState(null);
-    // const [businessPhotos, setBusinessPhotos] = useState(null);
+function DocumentUpload({ formData, updateFormData, setPersonalNext }) {
+    // const [uploadedDocuments, setUploadedDocuments] = useState({
+    //     vendor_aadharCard: null,
+    //     vendor_PAN: null,
+    //     business_PAN: null,
+    //     electricity_bill: null,
+    //     business_photos: null,
+    //     liscence: null
+    // });
 
-    const [uploadedDocuments, setUploadedDocuments] = useState({
-        vendor_aadharCard: null,
-        vendor_PAN: null,
-        business_PAN: null,
-        electricity_bill: null,
-        business_photos: null,
-        liscence:null
-    });
-    
+    const [uploadedDocuments, setUploadedDocuments] = useState(formData);
+    const [errors, setErrors] = useState({});
+    useEffect(() => {
+        setPersonalNext(false);
+    }, [])
+
+
+    useEffect(() => {
+        updateFormData(uploadedDocuments);
+
+        const requiredFields = ["vendor_aadharCard", "vendor_PAN", "business_PAN", "electricity_bill", "business_photos", "liscence"];
+
+        // Check if all required fields have files uploaded
+        const allFieldsFilled = requiredFields.every(
+            (field) => uploadedDocuments[field] instanceof File || (Array.isArray(uploadedDocuments[field]) && uploadedDocuments[field].length > 0)
+        );
+
+        setPersonalNext(allFieldsFilled ? true : false);
+    }, [uploadedDocuments, updateFormData, setPersonalNext]);
 
     const handleFileDrop = (fieldName, isMultiple = false) => (acceptedFiles) => {
         if (acceptedFiles.length > 0) {
             const files = isMultiple ? acceptedFiles : acceptedFiles[0];
-    
+
             setUploadedDocuments((prevState) => ({
                 ...prevState,
                 [fieldName]: files,
             }));
-    
+
             updateFormData({
                 [fieldName]: files,
             });
         }
     };
-    
-    
+
+
 
     const handleFileRemove = (fieldName) => {
         setUploadedDocuments((prevState) => ({
@@ -219,7 +368,7 @@ function DocumentUpload({ updateFormData }) {
             [fieldName]: uploadedDocuments[fieldName].filter((_, i) => i !== index),
         });
     };
-    
+
 
     return (
         <div className="personal-info-form">
@@ -233,9 +382,9 @@ function DocumentUpload({ updateFormData }) {
                     label="Aadhar Card"
                     file={uploadedDocuments["vendor_aadharCard"]}
                     onDrop={handleFileDrop("vendor_aadharCard", false)}
-                    onRemove={()=> handleFileRemove("vendor_aadharCard") }
-                    isLastFileUpload={ false }
-                    
+                    onRemove={() => handleFileRemove("vendor_aadharCard")}
+                    isLastFileUpload={false}
+
                 />
 
                 {/* PAN Card Upload */}
@@ -243,8 +392,8 @@ function DocumentUpload({ updateFormData }) {
                     label="PAN Card"
                     file={uploadedDocuments["vendor_PAN"]}
                     onDrop={handleFileDrop("vendor_PAN", false)}
-                    onRemove={()=> handleFileRemove("vendor_PAN") }
-                    isLastFileUpload={ false }
+                    onRemove={() => handleFileRemove("vendor_PAN")}
+                    isLastFileUpload={false}
                 />
 
                 {/* Business PAN Upload */}
@@ -252,8 +401,8 @@ function DocumentUpload({ updateFormData }) {
                     label="Business PAN"
                     file={uploadedDocuments["business_PAN"]}
                     onDrop={handleFileDrop("business_PAN", false)}
-                    onRemove={()=> handleFileRemove("business_PAN") }
-                    isLastFileUpload={ false }
+                    onRemove={() => handleFileRemove("business_PAN")}
+                    isLastFileUpload={false}
                 />
 
                 {/* Electricity Bill Upload */}
@@ -261,8 +410,8 @@ function DocumentUpload({ updateFormData }) {
                     label="Electricity Bill"
                     file={uploadedDocuments["electricity_bill"]}
                     onDrop={handleFileDrop("electricity_bill", false)}
-                    onRemove={()=> handleFileRemove("electricity_bill") }
-                    isLastFileUpload={ false }
+                    onRemove={() => handleFileRemove("electricity_bill")}
+                    isLastFileUpload={false}
                 />
 
                 {/* liscence */}
@@ -270,30 +419,30 @@ function DocumentUpload({ updateFormData }) {
                     label="liscence"
                     file={uploadedDocuments["liscence"]}
                     onDrop={handleFileDrop("liscence", false)}
-                    onRemove={()=> handleFileRemove("liscence") }
-                    isLastFileUpload={ false }
+                    onRemove={() => handleFileRemove("liscence")}
+                    isLastFileUpload={false}
                 />
 
                 {/* Business Photos Upload */}
                 <FileUpload
                     label="Business Photos"
-                    file={ uploadedDocuments["business_photos"] }
+                    file={uploadedDocuments["business_photos"]}
                     onDrop={handleFileDrop("business_photos", true)}
                     onRemove={(index) => handleMultipleFileRemove("business_photos", index)}
-                    isLastFileUpload={ true }
+                    isLastFileUpload={true}
                 />
             </section>
         </div>
     );
 };
 
-const FileUpload = ({ label, file, onDrop, onRemove, isLastFileUpload}) => {
+const FileUpload = ({ label, file, onDrop, onRemove, isLastFileUpload }) => {
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
         accept: "image/*,application/pdf",
         multiple: isLastFileUpload, // Dynamically set based on the component
     });
-    
+
 
     return (
         <div className="file-upload">
@@ -308,24 +457,26 @@ const FileUpload = ({ label, file, onDrop, onRemove, isLastFileUpload}) => {
             {/* Handle single or multiple files */}
             {file && (
                 <div className="file-info">
-                    <strong>Selected {isLastFileUpload ? "Files" : "File"}:</strong>
-                    {isLastFileUpload ? (
-                        file.map((f, index) => (
-                            <div key={index} className="file-item px-3">
-                                {f.name}
-                                <button className="remove-btn" onClick={() => onRemove(index)}>
+                    <strong className='px-2' >Selected {isLastFileUpload ? "Files" : "File"}:</strong>
+                    <div className="selected-file-container">
+                        {isLastFileUpload ? (
+                            file.map((f, index) => (
+                                <div key={index} className="file-item px-3">
+                                    {f.name}
+                                    <button className="remove-btn" onClick={() => onRemove(index)}>
+                                        <h6>X</h6>
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="file-item">
+                                {file.name}
+                                <button className="remove-btn" onClick={onRemove}>
                                     <h6>X</h6>
                                 </button>
                             </div>
-                        ))
-                    ) : (
-                        <div className="file-item">
-                            {file.name}
-                            <button className="remove-btn" onClick={onRemove}>
-                                <h6>X</h6>
-                            </button>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             )}
         </div>

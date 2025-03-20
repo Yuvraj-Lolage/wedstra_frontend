@@ -104,11 +104,12 @@
 }
 
 
-#main-container .steps-col{
+#main-container #steps-col{
     height: 92vh;
     background: linear-gradient(-40deg, var(--line-secondary-color) ,var(--line-primary-color));
     position: relative;
     padding: 10px;
+    margin: 0 !important;
 }
 
 #main-container .forms-col{
@@ -120,7 +121,7 @@
     flex-direction: column;
 }
 
-#main-container .steps-col .design-circle-1{
+#main-container #steps-col .design-circle-1{
     position: absolute;
     bottom: 0;
     left: 0;
@@ -130,7 +131,7 @@
     border-radius: 0px 100% 0px 10px;
 }
 
-#main-container .steps-col .design-circle-2{
+#main-container #steps-col .design-circle-2{
     position: absolute;
     bottom: 0;
     left: 0;
@@ -140,7 +141,7 @@
     border-radius: 0px 100% 0px 10px;
 }
 
-#main-container .steps-col .design-circle-3{
+#main-container #steps-col .design-circle-3{
     position: absolute;
     bottom: 0;
     left: 0;
@@ -150,7 +151,7 @@
     border-radius: 0px 100% 0px 10px;
 }
 
-#main-container .steps-col .title-container .title{
+#main-container #steps-col .title-container .title{
     text-align: start;
     padding: 20px 20px 0px 20px;
     color: white;
@@ -159,7 +160,7 @@
     font-size: 2.6rem;
 }
 
-#main-container .steps-col .title-container .sub-title{
+#main-container #steps-col .title-container .sub-title{
     text-align: start;
     padding: 12px 20px;
     color: white;
@@ -168,7 +169,7 @@
     font-size: 1.2rem;
 }   
 
-#main-container .steps-col .steps-container .step .step-circle{
+#main-container #steps-col .steps-container .step .step-circle{
     width: 60px;
     height: 60px;
     background-color: transparent;
@@ -183,7 +184,7 @@
     z-index: 1;
 }
 
-#main-container .steps-col .steps-container .step .step-circle.active{
+#main-container #steps-col .steps-container .step .step-circle.active{
     width: 60px;
     height: 60px;
     background-color: rgba(221, 157, 17, 1);
@@ -198,12 +199,12 @@
     z-index: 1;
 }
 
-#main-container .steps-col .steps-container{
+#main-container #steps-col .steps-container{
     margin: 0  0 0 30px;
 }
 
 
-#main-container .steps-col .steps-container .step{
+#main-container #steps-col .steps-container .step{
     display: flex;
     justify-content: start;
     align-items: center;

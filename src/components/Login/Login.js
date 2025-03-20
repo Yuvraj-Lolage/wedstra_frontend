@@ -39,20 +39,19 @@ const LoginForm = ({ showAlert }) => {
     }
 
     try {
-      // const response = await axiosInstance.post("/vendor/login", loginData);
+      const response = await axiosInstance.post("/vendor/login", loginData);
 
-      // if (response.status === 200) {
-      //   console.log(response.data);
-      //   localStorage.setItem("token", response.data); // Store JWT token
-      //   sessionStorage.setItem("message", "Login Successful!"); // Store username
-      showAlert("success", "Vendor Login success.", true);
-      //   navigate("/home"); // Redirect after successful login
+      if (response.status === 200) {
+        console.log(response.data);
+        localStorage.setItem("token", response.data); // Store JWT token
+        showAlert("success", "Vendor Login success.", true, );
+        // navigate("/homepage"); // Redirect after successful login
+        window.location.href = "/";
+      }
 
-      // }
-
-      // else {
-      //   setError("Login failed");
-      // }
+      else {
+        setError("Login failed");
+      }
     } catch (error) {
       setError("Invalid email or password");
     }
@@ -60,21 +59,6 @@ const LoginForm = ({ showAlert }) => {
 
   return (
     <>
-      {/* <Typography variant="h2" align="center" color="primary" gutterBottom>Hello</Typography>   */}
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert
-          // anchorOrigin={{vertical: top, horizontal:right }}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          severity="success"
-          size="lg"
-          variant="filled"
-          sx={{ width: '100%' }}
-          // key={top + right}
-        >
-          This is a success Alert inside a Snackbar!
-        </Alert>
-      </Snackbar>
       <div class="text-center">
         <div class="row">
           <div class="col-lg-6 left-col">
@@ -103,44 +87,6 @@ const LoginForm = ({ showAlert }) => {
           </div>
         </div>
       </div>
-
-
-
-      {/* <div className="container d-flex justify-content-center align-items-center vh-100">
-        <div className="card shadow-lg p-4" style={{ width: "400px" }}>
-          <h2 className="text-center mb-4">Login</h2>
-          {error && <div className="alert alert-danger">{error}</div>}
-          <form onSubmit={handleLogin}>
-            <div className="mb-3">
-              <label className="form-label">Username:</label>
-              <input
-                type="text"
-                className="form-control"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Password:</label>
-              <input
-                type="password"
-                className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary w-100">
-              Login
-            </button>
-          </form>
-        </div>
-      </div>
- */}
-
-
-
     </>
   );
 };

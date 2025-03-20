@@ -1,31 +1,23 @@
 import { jwtDecode } from "jwt-decode";
 import axiosInstance from "../API/axiosInstance";
-import { useNavigate } from "react-router-dom";
 
-export const getCurrentUser = () => {
+export const getCurrentUser = async () => {
   const token = localStorage.getItem("token");
   if (!token) return null;
 
   try {
     const decodedToken = jwtDecode(token);
-    return decodedToken.sub; // Assuming 'sub' contains the username
+    const username =  decodedToken.sub; // Assuming 'sub' contains the username
+
+    const response = await axiosInstance.get(`/vendor/getVendorByUsername/${ username }`,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data;
+
   } catch (error) {
     console.error("Invalid token", error);
     return null;
   }
 };
-
-
-export function findUserDetailsByUserName(username){
-  const token = localStorage.getItem('token');
-  axiosInstance.get(`/user/get-user/${ username }`,{
-    headers:{
-      Authorization: `Bearer ${ token }`
-    }
-  })
-  .then((response) => {
-    localStorage.setItem("user", JSON.stringify(response.data));
-    
-  })
-  return null;
-}

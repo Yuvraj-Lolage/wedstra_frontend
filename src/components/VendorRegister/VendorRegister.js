@@ -1,14 +1,14 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import "./vendor-register.css";
 import axiosInstance from "../../API/axiosInstance";
 import { BusinessInformation, DocumentUpload, PersonalInformation } from './Persoanl Information/PersonalInformation';
 import { useNavigate } from 'react-router-dom';
 
-
-const message = ['Step 1', 'Step 2', 'Step 3'];
 export default function VendorRegister() {
     const navigate = useNavigate();
     const [step, setStapes] = useState(1);
+    const [errors, setErrors] = useState({});
+    const [personalNext, setPersonalNext] = useState(true);
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -22,13 +22,12 @@ export default function VendorRegister() {
         business_photos: null,
         liscence: "",
         gst_number: "",
-        terms_and_conditions: false,
+        terms_and_conditions: "",
         email: "",
         phone_no: "",
         city: "",
     });
     const totalSteps = 3;
-
     const handlePrev = () => {
         if (step > 1) {
             setStapes((step) => step - 1);
@@ -51,68 +50,41 @@ export default function VendorRegister() {
     const loadComponents = (step) => {
         switch (step) {
             case 1:
-                return <PersonalInformation updateFormData={updateFormData} />
+                return <PersonalInformation formData={formData} updateFormData={updateFormData} setPersonalNext={ setPersonalNext } />;
             case 2:
-                return <BusinessInformation updateFormData={updateFormData} />
+                return <BusinessInformation formData={formData} updateFormData={updateFormData} setPersonalNext={ setPersonalNext }/>
             case 3:
-                return <DocumentUpload updateFormData={updateFormData} />
+                return <DocumentUpload formData={formData} updateFormData={updateFormData} setPersonalNext={ setPersonalNext }/>
             default:
-                return <PersonalInformation updateFormData={updateFormData} />
+                return <PersonalInformation formData={formData} updateFormData={updateFormData} setPersonalNext={ setPersonalNext }/>
         }
     }
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-
-    //     const formDataToSend = new FormData();
-
-    //     Object.entries(formData).forEach(([key, value]) => {
-    //         formDataToSend.append(key, value);
-    //     });
-
-    //     console.log(formData);
-        
-
-    //     const response = axiosInstance.post("/vendor/register", formData, { 
-    //         headers: { 'Content-Type': 'multipart/form-data' },
-    //         withCredentials: false  // Disable credentials if not needed
-    //       } );
-
-
-    //       if (response.status === 200) {
-    //         console.log("Vendor created success..!");
-    //         console.log(response.data);
-    //       }
-    //       else {
-    //         console.log();
-    //         ("Login failed");
-    //       }
-    // }
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         const formDataToSend = new FormData();
-    
+
         // Append non-file fields
         Object.entries(formData).forEach(([key, value]) => {
             if (key !== 'business_photos') {
                 formDataToSend.append(key, value);
             }
         });
-    
+
         // Append each business photo individually
         if (formData.business_photos) {
             formData.business_photos.forEach((file) => {
                 formDataToSend.append('business_photos', file);
             });
         }
-    
+
         try {
             const response = await axiosInstance.post("/vendor/register", formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: false,
             });
-    
+
             if (response.status === 200) {
                 console.log("Vendor created successfully!");
                 console.log(response.data);
@@ -124,15 +96,12 @@ export default function VendorRegister() {
             console.error("An error occurred during registration:", error);
         }
     };
-    
-
-
     return (
         <>
 
             <div class="text-center">
                 <div class="row" id='main-container'>
-                    <div class="col-lg-4 steps-col">
+                    <div class="col-lg-4 " id='steps-col'>
                         <div className="title-container">
                             <h1 className="title">Register Your Business in Simple Steps</h1>
                             <h4 className="sub-title">Follow our step-by-step process to get started seamlessly.</h4>
@@ -174,15 +143,14 @@ export default function VendorRegister() {
                             <div className='action-buttons'>
                                 <button className={`${(step - 1) < 1 ? "btn disabled" : "btn"}`} onClick={handlePrev}>Previous</button>
                                 {(step - 1) >= 2 ?
-
-                                    <button className="btn btn-success" onClick={handleSubmit} style={{ backgroundColor: "green" }}>Submit</button> :
-                                    <button className={`${(step - 1) >= 2 ? "btn disabled" : "btn"}`} onClick={handleNext}>Next</button>}
+                                    <button className={`btn btn-success ${ !personalNext ? 'disabled' : ''} `} onClick={handleSubmit} style={{ backgroundColor: "green" }}>Submit</button> :
+                                    <button className={`btn ${!personalNext ? "disabled" : ""}`} onClick={handleNext} disabled={!personalNext}>Next</button>}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-        </> 
+        </>
     )
 }

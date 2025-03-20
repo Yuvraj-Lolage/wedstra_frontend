@@ -1,116 +1,93 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'
 import "./vendorDashboard.css";
-import dashboard_icon from "../../images/dashboard_icon.png";
-import services_icon from "../../images/services_icon.png";
-import events_icon from "../../images/events_icon.png";
-import analysis_icon from "../../images/analysis_icon.png";
-import profile_icon from "../../images/profile_icon.png";
+import axiosInstance from "../../API/axiosInstance";
 import create_service from "../../images/create_service.png";
+import { FaStar, FaTrash, FaEdit, FaEye, FaRupeeSign, FaMapMarkerAlt } from "react-icons/fa";
+import ServiceForm from '../Create Service/ServiceForm';
+import useAuthCheck from "../../Auth/useAuthCheck";
+import DashboardNav from './Dashboard Navbar/DashboardNav';
+import DashboardEvents from './Dashboard Events/DashboardEvents';
+import VendorServices from './Dashboard Services/VendorServices';
+
 
 export default function VendorDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [vendorServices, setServices] = useState([]);
+  const [currentUser, setCurrentUser] = useState();
+  useAuthCheck();
+  useEffect(() => {
+    setCurrentUser(JSON.parse(localStorage.getItem("currentUser")));
+    console.log(JSON.stringify(currentUser));
+  }, [])
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      if (currentUser && currentUser.id) {
+        const token = localStorage.getItem("token");
+        try {
+          const response = await axiosInstance.get(
+            `/service/${currentUser.id}/all`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setServices(response.data)
+          console.log("Response:", JSON.stringify(vendorServices));
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+        }
+      }
+    };
+
+    fetchServices();
+  }, [currentUser]); // Runs whenever currentUser changes
 
   const loadComponents = () => {
     switch (activeTab) {
       case "dashboard":
-        return <Dashboard />;
+        return <Dashboard currentUser={currentUser} />;
       case "services":
-        return <div>Services</div>;
+        return <VendorServices vendorServices={vendorServices} setVendorServices={setServices} />;
       case "events":
-        return <div>Events</div>;
+        return <DashboardEvents />;
       case "analysis":
         return <div>Analyatics</div>;
       case "profile":
         return <div>profile</div>;
+      case "createService":
+        return <ServiceForm />;
       default:
         return <Dashboard />;
     }
   }
   return (
-    <div id="main-dashboard-div">
-      <div>
-        <div class="row">
-          <div class="col-2 vertical-nav-col" >
-            <DashboardNav activeTab={activeTab} setActiveTab={setActiveTab} />
-          </div>
-          <div class="col-10 dashboard-content-col">
-            {loadComponents()}
-          </div>
-        </div>
+    <div id="main-dashboard-div" className="d-flex">
+      {/* Sidebar (Hidden on Mobile, Visible on Tablet & Larger Screens) */}
+      <div className="sidebar-container d-none d-md-block">
+        <DashboardNav activeTab={activeTab} setActiveTab={setActiveTab} currentUser={currentUser} />
+      </div>
+
+      {/* Main Content (Always Visible) */}
+      <div className="dashboard-content flex-grow-1 p-3">
+        {loadComponents()}
       </div>
     </div>
+
+
   )
 }
 
-
-function DashboardNav({ activeTab, setActiveTab }) {
-  // const [activeTab, setActiveTab] = useState("dashboard");
-  function handleNavLinkActive(navItem) {
-    setActiveTab(navItem);
-  }
-  return (
-    <div className='vertical-nav-container pt-2'>
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <section className={`nav-link custom-nav-link  ${activeTab === "dashboard" ? "active" : ""}`} id="dashboard" onClick={() => { handleNavLinkActive("dashboard") }}>
-            <img className='icon' src={dashboard_icon} />
-            <span className='text'>dashboard</span>
-          </section>
-        </li>
-        <li class="nav-item">
-          <section className={`nav-link custom-nav-link  ${activeTab === "services" ? "active" : ""}`} id="services" onClick={() => { handleNavLinkActive("services") }}>
-            <img className='icon' src={services_icon} />
-            <span className='text'>Services</span>
-          </section>
-        </li>
-        <li class="nav-item">
-          <section className={`nav-link custom-nav-link  ${activeTab === "events" ? "active" : ""}`} id="events" onClick={() => { handleNavLinkActive("events") }}>
-            <img className='icon' src={events_icon} />
-            <span className='text'>Events</span>
-          </section>
-        </li>
-        <li class="nav-item">
-          <section className={`nav-link custom-nav-link  ${activeTab === "analysis" ? "active" : ""}`} id="analysis" onClick={() => { handleNavLinkActive("analysis") }}>
-            <img className='icon' src={analysis_icon} />
-            <span className='text'>Analyatics</span>
-          </section>
-        </li>
-        <li class="nav-item">
-          <section className={`nav-link custom-nav-link  ${activeTab === "profile" ? "active" : ""}`} id="profile" onClick={() => { handleNavLinkActive("profile") }}>
-            <img className='icon' src={profile_icon} />
-            <span className='text'>profile</span>
-          </section>
-        </li>
-      </ul>
-    </div>
-  );
-}
-
-
-
-function Dashboard() {
+function Dashboard({ currentUser }) {
   return (
     <div className='dashboard-component'>
       <div className='user-details'>
-        <h1 id="title">Welcome back, Varun</h1>
-        <h3 id="sub-title">your are logged in as <span>Shree Photographers</span></h3>
+        <h1 id="title">Welcome back, {currentUser ? currentUser.vendor_name : "Guest"}</h1>
+        <h3 id="sub-title">your are logged in as <span>{currentUser ? currentUser.business_name : "No-Business"}</span></h3>
       </div>
       <div id='important-msg'>
-        {/* <section class="placeholder-glow mb-1">
-          <span class="placeholder  bg-light col-12"></span>
-        </section>
-        <section class="placeholder-glow  mb-1">
-          <span class="placeholder  bg-light col-12"></span>
-        </section>
-        <section class="placeholder-glow mb-1">
-          <span class="placeholder  bg-light col-12"></span>
-        </section>
-        
-       <section class="placeholder-glow mb-1">
-          <span class="placeholder  bg-light col-12"></span>
-        </section> */}
-        {/* <a class="btn btn- disabled placeholder col-4" aria-disabled="true"></a> */}
       </div>
       <div class="text-center">
         <div class="row">
@@ -129,7 +106,7 @@ function Dashboard() {
             </button>
           </div>
           <div class="col-lg-4 col-mg-6 col-sm-6">
-          <button className='content-button' to="/create-service">
+            <button className='content-button' to="/create-service">
               <Link id='link' to="/create-service">
                 <section className='button-section'>
                   <section className='button-img-section'>
@@ -143,7 +120,7 @@ function Dashboard() {
             </button>
           </div>
           <div class="col-lg-4 col-mg-6 col-sm-6">
-          <button className='content-button' to="/create-service">
+            <button className='content-button' to="/create-service">
               <Link id='link' to="/create-service">
                 <section className='button-section'>
                   <section className='button-img-section'>
@@ -161,3 +138,4 @@ function Dashboard() {
     </div>
   )
 }
+

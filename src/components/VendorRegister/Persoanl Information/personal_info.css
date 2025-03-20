@@ -12,7 +12,7 @@
 }
 
 .personal-info-form .form-section{
-    margin: 30px 100px;
+    margin: 0;
 }
 
 .personal-info-form .form-section .action-buttons{
@@ -140,4 +140,18 @@
     border-radius: 10px;
     background: rgba(172, 255, 190, 0.17);
     transition: all 0.3s ease-in-out;
+}
+
+.business-info-form{
+    width: 90%;
+}
+
+.invalid-feedback{
+    text-align: start;
+}
+
+.file-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
