@@ -23,7 +23,7 @@
 }
 
 .row .right-col {
-    background: url(../../images/login_background.jpg);
+    background: url('../../images/login_background.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     padding: 0;

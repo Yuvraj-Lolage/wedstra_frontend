@@ -204,7 +204,6 @@
     margin-right: 10px;
   }
   
-  /* Toggle Button (Mobile View) */
   .toggle-btn {
     position: absolute;
     top: 15px;
@@ -242,7 +241,6 @@
     }
   }
   
-  * User Info & Logout Section */
 .user-info-div {
   position: absolute;
   bottom: 10px;
@@ -254,7 +252,7 @@
   justify-content: center;
 }
 
-/* Logout Button */
+
 .btn-dark {
   width: 90%;
   font-size: 1.1rem;

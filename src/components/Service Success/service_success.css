@@ -1,4 +1,4 @@
-/* src/VendorRegistrationSuccess.css */
+
 .success-container {
     display: flex;
     justify-content: center;
@@ -16,7 +16,7 @@
   }
   
   .illustration {
-    width: 250px; /* Adjust size as needed */
+    width: 250px; 
     margin-bottom: 20px;
   }
   
