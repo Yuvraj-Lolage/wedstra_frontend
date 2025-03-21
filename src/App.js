@@ -13,9 +13,18 @@ import VendorDashboard from './components/Vendor Dashboard/VendorDashboard';
 import ServiceDetails from './components/ServiceDetails/ServiceDetails';
 import ServiceForm from './components/Create Service/ServiceForm';
 import ServiceSuccess from './components/Service Success/ServiceSuccess';
+import ProtectedRoute from './Auth/ProtectedRouting';
 
 function App() {
-  const [alert, setAlert] = useState({ type: "", message: "", isOpen: false, onClose:null })
+  const [token, setToken] = useState(() => {
+    const storedToken = localStorage.getItem("token");
+    return storedToken || null;
+  });
+  const [userRole, setUserRole] = useState(() => {
+    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+    return storedUser?.role || null;
+  });
+  const [alert, setAlert] = useState({ type: "", message: "", isOpen: false, onClose: null })
 
   const showAlert = (type, message, onClose = null) => {
     setAlert({ type, message, isOpen: true, });
@@ -32,20 +41,52 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Navbar />
-        <Alert type={alert.type} message={alert.message} isOpen={alert.isOpen} onClose={ closeAlert }/>
+        <Navbar token={token} userRole={userRole} setToken={setToken} setUserRole={setUserRole} />
+        <Alert type={alert.type} message={alert.message} isOpen={alert.isOpen} onClose={closeAlert} />
         <Routes>
-          {/* <Route path='/' element={<Navigate to="/home" replace />} /> */}
           <Route path='/' element={<Homepage />} />
-          <Route path='/user-register' element={<RegistrationForm />} />
-          <Route path='/vendor-register' element={<VendorRegister />} />
           <Route path='/register-success' element={<RegisterSuccessful />} />
-          <Route path='/vendor-login' element={<LoginForm showAlert={showAlert} />} />
-          <Route path='/login-success' element={<LoginSuccessful />} />
-          <Route path='/vendor-dashboard' element={<VendorDashboard />} />
-          <Route path='/service-details' element={<ServiceDetails />} />
-          <Route path='/service-create-success' element={ <ServiceSuccess/> }/>
+          <Route path='*' element={<Navigate to="/" />} />
 
+          {/* Unauthorized Routes */}
+          {!token &&
+            <>
+              <Route path='/vendor-login' element={<LoginForm showAlert={showAlert} />} />
+              <Route path='/user-register' element={<RegistrationForm />} />
+              <Route path='/vendor-register' element={<VendorRegister />} />
+            </>
+
+          }
+
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+
+            {userRole === "VENDOR" ?
+              (
+                // render this routes if Role is Vendor
+                <>
+                <Route path='/' element={<Homepage />} />
+                  <Route path='/vendor-login' element={<Navigate to="/" />} />
+                  <Route path='/vendor-register' element={<Navigate to="/" />} />
+                  <Route path='/login-success' element={<LoginSuccessful />} />
+                  <Route path='/vendor-dashboard' element={<VendorDashboard />} />
+                  <Route path='/service-details' element={<ServiceDetails />} />
+                  <Route path='/service-create-success' element={<ServiceSuccess />} />
+                </>
+              )
+              : (
+                //render this routes if Roles is User
+                <>
+                <Route path='/' element={<Homepage />} />
+                  <Route path='/vendor-login' element={<Navigate to="/" />} />
+                  <Route path='/vendor-register' element={<Navigate to="/" />} />
+                  <Route path='/login-success' element={<LoginSuccessful />} />
+                  <Route path='/vendor-dashboard' element={<Navigate to="/" />} />
+                  <Route path='/service-details' element={<ServiceDetails />} />
+                  <Route path='/service-create-success' element={<Navigate to="/" />} />
+                </>
+              )}
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

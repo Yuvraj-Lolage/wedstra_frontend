@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Link, Route, useNavigate } from "react-router-dom";
 import axiosInstance from "../../API/axiosInstance";
 import { InputLabel } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 import "./login.css";
 
 
@@ -45,7 +43,6 @@ const LoginForm = ({ showAlert }) => {
         console.log(response.data);
         localStorage.setItem("token", response.data); // Store JWT token
         showAlert("success", "Vendor Login success.", true, );
-        // navigate("/homepage"); // Redirect after successful login
         window.location.href = "/";
       }
 
